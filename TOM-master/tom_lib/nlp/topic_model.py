@@ -5,7 +5,7 @@ import numpy as np
 import tom_lib.stats
 from scipy import spatial, cluster
 from scipy.sparse import coo_matrix
-from sklearn.decomposition import NMF, LatentDirichletAllocation as LDA
+from sklearn.decomposition import NMF, LatentDirichletAllocation as LDA, TruncatedSVD as SVD
 import lda
 
 from tom_lib.structure.corpus import Corpus
@@ -292,3 +292,37 @@ class NonNegativeMatrixFactorization(TopicModel):
             doc_count += 1
         self.document_topic_matrix = coo_matrix((data, (row, col)),
                                                 shape=(self.corpus.size, self.nb_topics)).tocsr()
+
+class TruncatedSVD(TopicModel):
+    def infer_topics(self, num_topics=10, **kwargs):
+        self.nb_topics = num_topics
+        nmf = SVD(n_components=num_topics)
+        topic_document = nmf.fit_transform(self.corpus.sklearn_vector_space)
+        self.topic_word_matrix = []
+        self.document_topic_matrix = []
+        vocabulary_size = len(self.corpus.vocabulary)
+        row = []
+        col = []
+        data = []
+        for topic_idx, topic in enumerate(nmf.components_):
+            for i in range(vocabulary_size):
+                row.append(topic_idx)
+                col.append(i)
+                data.append(topic[i])
+        self.topic_word_matrix = coo_matrix((data, (row, col)),
+                                            shape=(self.nb_topics, len(self.corpus.vocabulary))).tocsr()
+        row = []
+        col = []
+        data = []
+        doc_count = 0
+        for doc in topic_document:
+            topic_count = 0
+            for topic_weight in doc:
+                row.append(doc_count)
+                col.append(topic_count)
+                data.append(topic_weight)
+                topic_count += 1
+            doc_count += 1
+        self.document_topic_matrix = coo_matrix((data, (row, col)),
+                                                shape=(self.corpus.size, self.nb_topics)).tocsr()
+

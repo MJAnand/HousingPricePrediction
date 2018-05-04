@@ -1,0 +1,23 @@
+{
+    "nodes": [
+        {
+            "description": "purchase, date, purchase date, working, keyboard",
+            "frequency": 0.4913886984232507,
+            "group": 0,
+            "name": 0
+        },
+        {
+            "description": "device, system, operating, operating system, windows",
+            "frequency": 0.19471221715806014,
+            "group": 1,
+            "name": 1
+        },
+        {
+            "description": "get, working, work, tried, help",
+            "frequency": 0.31389908441906256,
+            "group": 2,
+            "name": 2
+        }
+    ],
+    "links": []
+}

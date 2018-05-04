@@ -24,15 +24,15 @@ text {
 </style>
 <body>
     <div id="navigation">
-     <button onclick="location.href = '/';" id="myButton" >Home</button>
-      -
-        <select onChange="window.location.href=((this.value == 'topics') ? 'topic_cloud.html' : 'vocabulary.html')">
+       <button onclick="location.href = '/';" id="myButton" >Home</button>
+       -
+        <select onChange="window.location.href=((this.value == 'topics') ? 'topic_cloud_svd.html' : 'vocabulary_svd.html')">
             <option selected="selected" disabled="disabled">Overview</option>
             <option>topics</option>
             <option>vocabulary</option>
         </select>
         -
-        <select onChange="window.location.href='../topic/'+this.value+'.html'">
+        <select onChange="window.location.href='../topic_svd/'+this.value+'.html'">
             <option selected="selected" disabled="disabled">Details about a topic</option>
             {% for i in topic_ids %}
                 <option>{{ i }}</option>
@@ -78,7 +78,7 @@ function redraw() {
       + " scale(" + d3.event.scale + ")");
 }
 
-d3.json("{{ url_for('static', filename = 'data/topic_cloud.json') }}", function(error, cloud) {
+d3.json("{{ url_for('static', filename = 'data_svd/topic_cloud.json') }}", function(error, cloud) {
   if (error) throw error;
 
   force
@@ -107,7 +107,7 @@ d3.json("{{ url_for('static', filename = 'data/topic_cloud.json') }}", function(
       .text(function(d) { return d.name; });
 
   function show_details() {
-    window.location = "topic/"+d3.select(this).select("title").text()+".html";
+    window.location = "topic_svd/"+d3.select(this).select("title").text()+".html";
   }
 
   function focus_topic() {
